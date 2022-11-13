@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medfarm/screens/home/Doctor/doctordetails.dart';
+import 'package:medfarm/services/model/doctorinfo.dart';
+// import 'package:medfarm/services/profile.dart';
 
 class DoctorClinic extends StatefulWidget {
   const DoctorClinic({Key? key}) : super(key: key);
@@ -12,7 +16,17 @@ class _DoctorClinic extends State<DoctorClinic> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+     
+  var doctorDocumentList= FirebaseFirestore.instance.collection('doctors');
+  
+ 
+   Stream<List<DoctorInfo>> showDoctorsProfile(){
+        return doctorDocumentList.snapshots().map((snapshot) => snapshot.docs.map((doc) => DoctorInfo.fromJson(doc.data())).toList());
+    } 
+  
+
     return Scaffold(
+       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0.0,
@@ -22,26 +36,30 @@ class _DoctorClinic extends State<DoctorClinic> {
           Icons.menu,
           color: Colors.white,
         ),
-        actions: [
-          GestureDetector(
-            child: Container(
+        // actions: [
+        //   GestureDetector(
+        //     child: Container(
              
-              margin: const EdgeInsets.only(right: 10),
-              child: const Icon(
-                Icons.notifications_rounded,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          GestureDetector(
-            child: Container(
-               height: 40,
-              width: 40,
-              margin: const EdgeInsets.only(right: 10),
-              child: Image.asset("lib/images/medicine.jpeg"),
-            ),
-          )
-        ],
+        //       margin: const EdgeInsets.only(right: 10),
+        //       child: const Icon(
+        //         Icons.notifications_rounded,
+        //         color: Colors.white,
+        //       ),
+        //     ),
+        //   ),
+        //   GestureDetector(
+        //     child: Container(
+        //        height: 40,
+        //       width: 40,
+        //       margin: const EdgeInsets.only(right: 10),
+              
+        //       decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.circular(50),
+        //       ),
+        //       child: Image.asset("lib/images/medicine.jpeg"),
+        //     ),
+        //   )
+        // ],
       ),
       body: Container(
           decoration: BoxDecoration(
@@ -55,7 +73,7 @@ class _DoctorClinic extends State<DoctorClinic> {
               Container(
                 margin: const EdgeInsets.only(top: 20, left: 20),
                 child: const Text(
-                  "Hi Ashwin",
+                  "Hi  ",
                   style: TextStyle(
                     color: Color(0xff363636),
                     fontSize: 25,
@@ -74,46 +92,56 @@ class _DoctorClinic extends State<DoctorClinic> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(left: 20, top: 25, right: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color(0x1400000),
-                        offset: Offset(0, 10),
-                        blurRadius: 15,
-                        spreadRadius: 0)
-                  ],
-                ),
-                height: 60,
-                width: size.width,
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Container(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            prefixIcon: const Icon(Icons.medication_rounded),
-                            suffixIcon: const Icon(
-                              Icons.search,
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            hintText: "Search Doctors Here",
-                          ),
-                          onChanged: (value) {},
-                          onFieldSubmitted: (val) {},
-                        ),
-                      ),
-                    ),
-
-                  ],
+                padding: const EdgeInsets.only(left:10 ,right: 10),
+                margin: const EdgeInsets.only(top:10),
+                child: const Divider(                  
+                  height: 2,
+                  thickness: 2,
+                  indent: 1,
+                  endIndent: 1,                  
                 ),
               ),
+              // Container(
+              //   margin: const EdgeInsets.only(left: 20, top: 25, right: 20),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(5),
+              //     boxShadow: const [
+              //       BoxShadow(
+              //           color: Color(0x1400000),
+              //           offset: Offset(0, 10),
+              //           blurRadius: 15,
+              //           spreadRadius: 0)
+              //     ],
+              //   ),
+              //   height: 60,
+              //   width: size.width,
+              //   child: Row(
+              //     children:const [
+              //       // Expanded(
+              //       //   flex: 5,
+              //       //   child: Container(
+              //       //     child: TextFormField(
+              //       //       decoration: InputDecoration(
+              //       //         fillColor: Colors.white,
+              //       //         filled: true,
+              //       //         prefixIcon: const Icon(Icons.medication_rounded),
+              //       //         suffixIcon: const Icon(
+              //       //           Icons.search,
+              //       //         ),
+              //       //         border: OutlineInputBorder(
+              //       //             borderRadius: BorderRadius.circular(10)),
+              //       //         hintText: "Search Doctors Here",
+              //       //       ),
+              //       //       onChanged: (value) {},
+              //       //       onFieldSubmitted: (val) {},
+              //       //     ),
+              //       //   ),
+              //       // ),
+
+              //     ],
+              //   ),
+              // ),
               Container(
                 width: size.width,
                 margin: const EdgeInsets.only(top: 20, left: 20),
@@ -129,15 +157,16 @@ class _DoctorClinic extends State<DoctorClinic> {
                             fontWeight: FontWeight.w700),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 20, top: 1),
-                      child: const Align(
+                     Container(
+                      margin: const EdgeInsets.only(right: 20, top: 5),
+                      child:const  Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          "See All",
+                          "SCROLL LEFT",
                           style: TextStyle(
                             color: Color(0xff363636),
-                            fontSize: 17,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400
                           ),
                         ),
                       ),
@@ -150,9 +179,11 @@ class _DoctorClinic extends State<DoctorClinic> {
                 margin: const EdgeInsets.only(top: 20, left: 20),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
+                  
                   children: [
                     demoCategories(
-                        "lib/images/tooth.png", "Tooth", "10 doctors"),
+                        "lib/images/tooth.png", "Tooth", "10 doctors",
+                        ),
                     demoCategories(
                         "lib/images/brain.png", "Brain", "10 doctors"),
                     demoCategories(
@@ -160,6 +191,16 @@ class _DoctorClinic extends State<DoctorClinic> {
                     demoCategories(
                         "lib/images/bone.png", "Bones", "10 doctors"),
                   ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left:10 ,right: 10),
+                margin: const EdgeInsets.only(top:30),
+                child: const Divider(                  
+                  height: 2,
+                  thickness: 2,
+                  indent: 1,
+                  endIndent: 1,                  
                 ),
               ),
               Container(
@@ -178,14 +219,15 @@ class _DoctorClinic extends State<DoctorClinic> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(right: 20, top: 1),
-                      child: const Align(
+                      margin: const EdgeInsets.only(right: 20, top: 5),
+                      child:const  Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          "See All",
+                          "REGISTERED DOCTORS",
                           style: TextStyle(
                             color: Color(0xff363636),
-                            fontSize: 17,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400
                           ),
                         ),
                       ),
@@ -196,19 +238,46 @@ class _DoctorClinic extends State<DoctorClinic> {
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.only(left: 20, right: 20),
-                  child: ListView(
-                    children: [
-                      demoTopRatedDr("lib/images/heart.jpeg",
-                          "Dr. Gupreet Faltu", "Pagle Doctor", "5"),
-                      demoTopRatedDr("lib/images/heart.jpeg",
-                          "Dr. Gupreet Faltu", "Pagle Doctor", "5"),
-                      demoTopRatedDr("lib/images/heart.jpeg",
-                          "Dr. Gupreet Faltu", "Pagle Doctor", "5"),
-                      demoTopRatedDr("lib/images/heart.jpeg",
-                          "Dr. Gupreet Faltu", "Pagle Doctor", "5"),
-                      demoTopRatedDr("lib/images/heart.jpeg",
-                          "Dr. Gupreet Faltu", "Pagle Doctor", "5"),
-                    ],
+                  child: StreamBuilder<List<DoctorInfo>>(
+                    stream: showDoctorsProfile(),
+                    builder:(context,snapshot){
+                      if(snapshot.hasData){
+                        if(snapshot.data !=null){
+                          final doctors=snapshot.data!;
+                        return ListView(
+                      children:doctors.map(buildDoctor).toList(),
+                    );
+                        }
+                        else{
+                        return ListView(
+                      children: [
+                        demoTopRatedDr("lib/images/heart.jpeg",
+                            "Dr. Gupreet Singh", "MD Physician", "5","idraksheikh111@gmail.com"),
+                        demoTopRatedDr("lib/images/heart.jpeg",
+                            "Dr. Ashwin Khale", "Nephrologist", "5","idraksheikh111@gmail.com"),
+                        demoTopRatedDr("lib/images/heart.jpeg",
+                            "Dr. Abdul ", "MD Physician", "5","idraksheikh111@gmail.com"),
+                       
+                      ],
+                    );
+                      }
+                      
+                      }
+                      else{
+                        return ListView(
+                      children: [
+                        demoTopRatedDr("lib/images/heart.jpeg",
+                            "Dr. Gupreet Singh", "MD Physician", "5","idraksheikh111@gmail.com"),
+                        demoTopRatedDr("lib/images/heart.jpeg",
+                            "Dr. Ashwin Khale", "Nephrologist", "5","idraksheikh111@gmail.com"),
+                        demoTopRatedDr("lib/images/heart.jpeg",
+                            "Dr. Abdul ", "MD Physician", "5","idraksheikh111@gmail.com"),
+                       
+                      ],
+                    );
+                      }
+                      
+                    } 
                   ),
                 ),
               ),
@@ -222,7 +291,7 @@ class _DoctorClinic extends State<DoctorClinic> {
       margin: const EdgeInsets.only(right: 15),
       width: 100,
       decoration: BoxDecoration(
-        color: Color(0xff107163),
+        color:Colors.blue.shade500,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -259,11 +328,13 @@ class _DoctorClinic extends State<DoctorClinic> {
   }
 
   Widget demoTopRatedDr(
-      String image, String name, String speciality, String rating) {
+      String image, String name, String speciality, String rating,String email) {
     Size size = MediaQuery.of(context).size;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> DoctorDetails(email:email)));
+      },
       child: Container(
         height: 90,
         margin: const EdgeInsets.only(top: 10),
@@ -345,4 +416,8 @@ class _DoctorClinic extends State<DoctorClinic> {
       ),
     );
   }
+
+   Widget buildDoctor(DoctorInfo doctor){
+    return demoTopRatedDr("lib/images/heart.jpeg", doctor.doctorname!,doctor.specialisation!, "5",doctor.email!);
+   }
 }

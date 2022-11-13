@@ -87,18 +87,46 @@
 
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medfarm/screens/Wrapper.dart';
+import 'package:medfarm/services/auth.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+    
   runApp(const Medfarm());
 }
-
 class Medfarm extends StatelessWidget {
   const Medfarm({Key? key}) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
-    return const Wrapper();
+
+    return FutureBuilder(
+      future: Firebase.initializeApp(),
+       builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          return const Text('Something Went Wrong');
+        }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return StreamProvider<User?>.value(
+      value:AuthService().user,
+      initialData: null,
+      child:  const Wrapper(),
+      );
+        }
+
+        // Otherwise, show something whilst waiting for initialization to complete
+        return const CircularProgressIndicator();
+       }
+    );
+    
   }
 }
